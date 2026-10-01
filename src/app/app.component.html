@@ -1,0 +1,24 @@
+<div class="app-shell">
+  <header class="navbar navbar-expand-sm app-navbar">
+    <div class="container page-container">
+      <a class="brand d-flex align-items-center gap-2 text-decoration-none" routerLink="/types" aria-label="Pokédex, pagina delle categorie">
+        <span class="brand-mark" aria-hidden="true">P</span>
+        <span>Pokédex</span>
+      </a>
+      <nav aria-label="Navigazione principale">
+        <a class="nav-link" routerLink="/types" routerLinkActive="active" ariaCurrentWhenActive="page">Categorie</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="app-main container page-container py-4 py-md-5">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="app-footer">
+    <div class="container page-container d-flex flex-wrap justify-content-between gap-2 py-3">
+      <span>Pokédex · progetto didattico</span>
+      <span>Dati forniti da PokéAPI</span>
+    </div>
+  </footer>
+</div>

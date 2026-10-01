@@ -1,0 +1,53 @@
+:host {
+	display: block;
+	min-height: 100dvh;
+}
+
+.app-shell {
+	display: flex;
+	min-height: 100dvh;
+	flex-direction: column;
+}
+
+.app-main {
+	flex: 1;
+}
+
+.brand-mark {
+	display: grid;
+	width: 2rem;
+	height: 2rem;
+	place-items: center;
+	border: 2px solid currentColor;
+	border-radius: 50%;
+	font-size: 0.8rem;
+	font-weight: 800;
+}
+
+.app-navbar {
+	border-bottom: 1px solid var(--line);
+	background: var(--surface);
+}
+
+.brand {
+	color: var(--ink);
+	font-family: var(--font-display);
+	font-size: 1.25rem;
+	font-weight: 700;
+}
+
+.app-navbar .nav-link {
+	color: var(--ink-muted);
+	font-size: 0.875rem;
+	font-weight: 600;
+}
+
+.app-navbar .nav-link.active {
+	color: var(--accent);
+}
+
+.app-footer {
+	border-top: 1px solid var(--line);
+	color: var(--ink-muted);
+	font-size: 0.8rem;
+}
