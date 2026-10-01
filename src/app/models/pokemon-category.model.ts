@@ -39,5 +39,8 @@ export const POKEMON_CATEGORIES: readonly PokemonCategory[] = [
 export function findPokemonCategory(
   typeName: string | null,
 ): PokemonCategory | undefined {
-  return POKEMON_CATEGORIES.find((category) => category.type === typeName);
+  const normalizedTypeName = typeName?.toLowerCase();
+  return POKEMON_CATEGORIES.find(
+    (category) => category.type === normalizedTypeName,
+  );
 }

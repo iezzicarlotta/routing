@@ -1,4 +1,102 @@
-<section aria-labelledby="type-heading">
-  <h1 id="type-heading">Pokémon della categoria</h1>
-  <p>Seleziona una categoria per visualizzare i Pokémon.</p>
+<section class="type-page" aria-labelledby="type-heading">
+  @if (category; as selectedCategory) {
+    <header class="type-intro">
+      <a class="back-link" routerLink="/types">
+        <span aria-hidden="true">←</span> Tutte le categorie
+      </a>
+      <p class="eyebrow">CATEGORIA {{ selectedCategory.number }} · TIPO {{ selectedCategory.type }}</p>
+      <div class="type-intro__row">
+        <div>
+          <h1 id="type-heading">{{ selectedCategory.label }}<span>.</span></h1>
+          <p>{{ selectedCategory.description }}</p>
+        </div>
+        <span class="type-intro__icon" aria-hidden="true">{{ selectedCategory.icon }}</span>
+      </div>
+    </header>
+  } @else {
+    <header class="type-intro">
+      <a class="back-link" routerLink="/types">
+        <span aria-hidden="true">←</span> Tutte le categorie
+      </a>
+      <h1 id="type-heading">Categoria non trovata</h1>
+    </header>
+  }
+
+  @if (isLoading) {
+    <p class="loading-state" role="status" aria-live="polite">
+      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+      Caricamento dell’elenco…
+    </p>
+  }
+
+  @if (errorMessage) {
+    <div class="alert error-state" role="alert">
+      <span>{{ errorMessage }}</span>
+      @if (category) {
+        <button class="btn btn-sm retry-button" type="button" (click)="retry()">
+          Riprova
+        </button>
+      }
+    </div>
+  }
+
+  @if (!isLoading && !errorMessage && pokemonAssociations.length === 0) {
+    <p class="empty-state" role="status">Non ci sono Pokémon in questa categoria.</p>
+  }
+
+  @if (!isLoading && !errorMessage && pokemonAssociations.length > 0) {
+    <div class="list-toolbar">
+      <h2>Elenco Pokémon</h2>
+      <p>
+        <strong>{{ pokemonAssociations.length }}</strong>
+        {{ pokemonAssociations.length === 1 ? 'risultato' : 'risultati' }}
+      </p>
+    </div>
+
+    <ol class="pokemon-list list-unstyled">
+      @for (association of visiblePokemon; track association.pokemon.name) {
+        <li>
+          <a
+            class="pokemon-row"
+            [routerLink]="['/pokemon', association.pokemon.name]"
+            [queryParams]="{ type: currentType }"
+          >
+            <span class="pokemon-row__number">#{{ pokemonIdLabel(association) }}</span>
+            <span class="pokemon-row__name">{{ association.pokemon.name }}</span>
+            <span class="pokemon-row__action">Apri scheda <span aria-hidden="true">↗</span></span>
+          </a>
+        </li>
+      }
+    </ol>
+
+    @if (pageCount > 1) {
+      <nav class="pagination-bar" aria-label="Paginazione Pokémon">
+        <p>
+          Pokémon {{ firstVisibleNumber }}–{{ lastVisibleNumber }}
+          <span class="page-total">di {{ pokemonAssociations.length }}</span>
+        </p>
+        <div class="pagination-actions">
+          <button
+            class="btn page-button"
+            type="button"
+            aria-label="Pagina precedente"
+            [disabled]="currentPage === 1"
+            (click)="goToPreviousPage()"
+          >
+            ←
+          </button>
+          <span aria-live="polite">Pagina {{ currentPage }} di {{ pageCount }}</span>
+          <button
+            class="btn page-button"
+            type="button"
+            aria-label="Pagina successiva"
+            [disabled]="currentPage === pageCount"
+            (click)="goToNextPage()"
+          >
+            →
+          </button>
+        </div>
+      </nav>
+    }
+  }
 </section>
