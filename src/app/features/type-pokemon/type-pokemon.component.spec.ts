@@ -109,4 +109,29 @@ describe('TypePokemonComponent', () => {
     expect(fixture.componentInstance.isLoading).toBe(false);
     httpController.expectNone('https://pokeapi.co/api/v2/type/ghost/');
   });
+
+  it('mantiene attiva la sottoscrizione e riprova dopo un errore HTTP', () => {
+    const failedRequest = httpController.expectOne(
+      'https://pokeapi.co/api/v2/type/fire/',
+    );
+    failedRequest.flush('Servizio non disponibile', {
+      status: 503,
+      statusText: 'Service Unavailable',
+    });
+
+    expect(fixture.componentInstance.isLoading).toBe(false);
+    expect(fixture.componentInstance.errorMessage).toContain(
+      'Non è stato possibile caricare',
+    );
+
+    fixture.componentInstance.retry();
+    const retriedRequest = httpController.expectOne(
+      'https://pokeapi.co/api/v2/type/fire/',
+    );
+    retriedRequest.flush({ id: 10, name: 'fire', pokemon: [] });
+
+    expect(fixture.componentInstance.isLoading).toBe(false);
+    expect(fixture.componentInstance.pokemonAssociations).toHaveLength(0);
+    expect(fixture.componentInstance.errorMessage).toBe('');
+  });
 });

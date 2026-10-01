@@ -1,4 +1,126 @@
-<section aria-labelledby="pokemon-heading">
-  <h1 id="pokemon-heading">Dettagli Pokémon</h1>
-  <p>Seleziona un Pokémon dall’elenco per consultare la sua scheda.</p>
+<section class="detail-page" aria-labelledby="pokemon-heading">
+  @if (returnCategory; as category) {
+    <a class="back-link" [routerLink]="['/types', category.type]">
+      <span aria-hidden="true">←</span> Torna ai Pokémon di tipo {{ category.label }}
+    </a>
+  } @else {
+    <a class="back-link" routerLink="/types">
+      <span aria-hidden="true">←</span> Torna alle categorie
+    </a>
+  }
+
+  @if (isLoading) {
+    <p class="loading-state" role="status" aria-live="polite">
+      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+      Caricamento della scheda…
+    </p>
+  }
+
+  @if (errorMessage) {
+    <div class="alert error-state" role="alert">
+      <span>{{ errorMessage }}</span>
+      <button class="btn btn-sm retry-button" type="button" (click)="retry()">
+        Riprova
+      </button>
+    </div>
+  }
+
+  @if (pokemon; as currentPokemon) {
+    <header class="detail-heading">
+      <p class="detail-eyebrow">POKÉDEX · N. {{ pokemonIdLabel(currentPokemon.id) }}</p>
+      <h1 id="pokemon-heading">{{ currentPokemon.name }}<span>.</span></h1>
+      <div class="type-tags" aria-label="Tipi del Pokémon">
+        @for (pokemonType of currentPokemon.types; track pokemonType.slot) {
+          <span
+            class="pokemon-type-tag"
+            [class]="'pokemon-type-tag pokemon-type-tag--' + pokemonType.type.name"
+          >
+            {{ typeLabel(pokemonType.type.name) }}
+          </span>
+        }
+      </div>
+    </header>
+
+    <div class="detail-layout">
+      <div class="detail-primary">
+        <section class="pokemon-portrait" aria-label="Immagine del Pokémon">
+          @if (imageUrl; as image) {
+            <img
+              class="pokemon-portrait__image"
+              [src]="image"
+              [alt]="'Illustrazione di ' + currentPokemon.name"
+              (error)="onImageError()"
+            />
+          } @else {
+            <div class="image-placeholder" role="img" aria-label="Immagine non disponibile">
+              Immagine non disponibile
+            </div>
+          }
+          <span class="portrait-index" aria-hidden="true">#{{ pokemonIdLabel(currentPokemon.id) }}</span>
+        </section>
+
+        <section class="measurements" aria-label="Misure">
+          <dl>
+            <div>
+              <dt>Altezza</dt>
+              <dd>{{ heightInMeters | number: '1.1-1' }} m</dd>
+            </div>
+            <div>
+              <dt>Peso</dt>
+              <dd>{{ weightInKilograms | number: '1.0-1' }} kg</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="abilities" aria-labelledby="abilities-heading">
+          <div class="section-heading">
+            <p>CARATTERE</p>
+            <h2 id="abilities-heading">Abilità</h2>
+          </div>
+          <ul class="ability-list list-unstyled">
+            @for (pokemonAbility of currentPokemon.abilities; track pokemonAbility.ability.name) {
+              <li>
+                <span>{{ pokemonAbility.ability.name.replaceAll('-', ' ') }}</span>
+                @if (pokemonAbility.is_hidden) {
+                  <span class="hidden-ability">Abilità nascosta</span>
+                }
+              </li>
+            } @empty {
+              <li class="empty-detail">Informazione non disponibile.</li>
+            }
+          </ul>
+        </section>
+      </div>
+
+      <section class="stats-section" aria-labelledby="stats-heading">
+        <div class="section-heading">
+          <p>VALORI DI BASE</p>
+          <h2 id="stats-heading">Statistiche</h2>
+        </div>
+        <ul class="stats-list list-unstyled">
+          @for (stat of currentPokemon.stats; track stat.stat.name) {
+            <li class="stat-row">
+              <div class="stat-row__label">
+                <span>{{ statLabel(stat) }}</span>
+                <strong>{{ stat.base_stat }}</strong>
+              </div>
+              <div
+                class="stat-track"
+                role="meter"
+                [attr.aria-label]="statLabel(stat)"
+                [attr.aria-valuenow]="stat.base_stat"
+                aria-valuemin="0"
+                aria-valuemax="255"
+              >
+                <span [style.width.%]="statBarWidth(stat.base_stat)"></span>
+              </div>
+            </li>
+          } @empty {
+            <li class="empty-detail">Statistiche non disponibili.</li>
+          }
+        </ul>
+        <p class="stats-note">Valori base · scala visiva fino a 255</p>
+      </section>
+    </div>
+  }
 </section>

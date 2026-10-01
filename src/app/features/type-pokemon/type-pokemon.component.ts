@@ -5,7 +5,9 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
   Observable,
   Subject,
+  catchError,
   distinctUntilChanged,
+  EMPTY,
   map,
   merge,
   switchMap,
@@ -68,7 +70,11 @@ export class TypePokemonComponent implements OnInit {
 
     merge(routeTypeName, retryTypeName)
       .pipe(
-        switchMap((typeName) => this.loadPokemonForType(typeName)),
+        switchMap((typeName) =>
+          this.loadPokemonForType(typeName).pipe(
+            catchError(this.onPokemonRequestError),
+          ),
+        ),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
@@ -112,6 +118,13 @@ export class TypePokemonComponent implements OnInit {
         ? 'Impossibile raggiungere PokéAPI. Controlla la connessione e riprova.'
         : 'Non è stato possibile caricare i Pokémon. Riprova tra poco.'
       : 'Questo tipo non esiste. Scegli una delle categorie disponibili.';
+  };
+
+  readonly onPokemonRequestError = (
+    error: HttpErrorResponse,
+  ): Observable<never> => {
+    this.onPokemonError(error);
+    return EMPTY;
   };
 
   private loadPokemonForType(
