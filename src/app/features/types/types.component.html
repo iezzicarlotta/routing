@@ -1,5 +1,62 @@
-<section aria-labelledby="types-heading">
-  <p class="eyebrow">Pokédex · tipologie</p>
-  <h1 id="types-heading">Categorie in arrivo</h1>
-  <p>La pagina delle categorie verrà collegata a PokéAPI.</p>
+<section class="categories-page" aria-labelledby="types-heading">
+  <header class="categories-intro row align-items-end g-3 mb-4 mb-lg-5">
+    <div class="col-12 col-lg-8">
+      <p class="eyebrow"><span class="eyebrow-index">01 / 03</span> · ESPLORA IL POKÉDEX</p>
+      <h1 id="types-heading" class="display-title">Tre elementi.<br /><span>Infinite avventure.</span></h1>
+    </div>
+    <p class="col-12 col-lg-4 intro-note">
+      Scegli un tipo per incontrare i suoi Pokémon e scoprire la loro scheda.
+    </p>
+  </header>
+
+  @if (isLoading) {
+    <p class="loading-state" role="status" aria-live="polite">
+      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+      Caricamento delle categorie…
+    </p>
+  }
+
+  @if (errorMessage) {
+    <div class="alert error-state" role="alert">
+      <span>{{ errorMessage }}</span>
+      <button class="btn btn-sm retry-button" type="button" (click)="loadCategories()">
+        Riprova
+      </button>
+    </div>
+  }
+
+  @if (!isLoading && !errorMessage && categories.length === 0) {
+    <p class="empty-state" role="status">Nessuna categoria disponibile al momento.</p>
+  }
+
+  @if (!isLoading && !errorMessage && categories.length > 0) {
+    <div class="row g-3 g-lg-4">
+      @for (category of categories; track category.type) {
+        <div class="col-12 col-md-4">
+          <article class="category-card h-100" [style.--category-accent]="category.color">
+            <a
+              class="category-card__link"
+              [routerLink]="['/types', category.type]"
+              [attr.aria-labelledby]="category.type + '-heading'"
+            >
+              <div class="category-card__top">
+                <span class="category-card__icon" aria-hidden="true">{{ category.icon }}</span>
+                <span class="category-card__number">{{ category.number }}</span>
+              </div>
+              <div class="category-card__copy">
+                <p class="category-card__eyebrow">Tipo Pokémon</p>
+                <h2 [id]="category.type + '-heading'">{{ category.label }}</h2>
+                <p class="category-card__description">{{ category.description }}</p>
+              </div>
+              <span class="category-card__action">
+                Esplora la categoria <span aria-hidden="true">↗</span>
+              </span>
+            </a>
+          </article>
+        </div>
+      }
+    </div>
+  }
+
+  <p class="source-note mt-4">Categorie e dati forniti da PokéAPI</p>
 </section>
