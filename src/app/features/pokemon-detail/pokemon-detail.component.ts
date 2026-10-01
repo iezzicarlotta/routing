@@ -14,10 +14,7 @@ import {
   switchMap,
   throwError,
 } from 'rxjs';
-import {
-  findPokemonCategory,
-  PokemonCategory,
-} from '../../models/pokemon-category.model';
+import { findPokemonCategory, PokemonCategory } from '../../models/pokemon-category.model';
 import { PokemonDetail, PokemonBaseStat } from '../../models/pokemon.model';
 import { PokemonApiService } from '../../services/pokemon-api.service';
 
@@ -93,7 +90,7 @@ export class PokemonDetailComponent implements OnInit {
     const artwork = this.pokemon.sprites.other['official-artwork'].front_default;
     return this.triedFallbackImage
       ? this.pokemon.sprites.front_default
-      : artwork ?? this.pokemon.sprites.front_default;
+      : (artwork ?? this.pokemon.sprites.front_default);
   }
 
   ngOnInit(): void {
@@ -109,15 +106,11 @@ export class PokemonDetailComponent implements OnInit {
       map((parameters) => parameters.get('name')),
       distinctUntilChanged(),
     );
-    const retryPokemonName = this.retryRequests.pipe(
-      map(() => this.currentName),
-    );
+    const retryPokemonName = this.retryRequests.pipe(map(() => this.currentName));
 
     merge(routePokemonName, retryPokemonName)
       .pipe(
-        switchMap((name) =>
-          this.loadPokemon(name).pipe(catchError(this.onPokemonRequestError)),
-        ),
+        switchMap((name) => this.loadPokemon(name).pipe(catchError(this.onPokemonRequestError))),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
@@ -166,9 +159,7 @@ export class PokemonDetailComponent implements OnInit {
           : 'Non è stato possibile caricare la scheda. Riprova tra poco.';
   };
 
-  readonly onPokemonRequestError = (
-    error: HttpErrorResponse,
-  ): Observable<never> => {
+  readonly onPokemonRequestError = (error: HttpErrorResponse): Observable<never> => {
     this.onPokemonError(error);
     return EMPTY;
   };

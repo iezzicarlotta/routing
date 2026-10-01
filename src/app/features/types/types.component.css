@@ -17,7 +17,6 @@
 
 .eyebrow {
   margin-bottom: 1rem;
-  letter-spacing: 0.04em;
 }
 
 .eyebrow-index,
@@ -29,7 +28,7 @@
 .display-title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(2.65rem, 6vw, 5.25rem);
+  font-size: 4.6rem;
   font-weight: 600;
   line-height: 1.03;
 }
@@ -51,7 +50,7 @@
   min-height: 20rem;
   border: 1px solid var(--line);
   border-top: 4px solid var(--category-accent);
-  border-radius: 0.55rem;
+  border-radius: 0.5rem;
   background: var(--surface);
   transition:
     transform 180ms ease,
@@ -197,5 +196,17 @@
   .category-card {
     animation: none;
     transition: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .display-title {
+    font-size: 3.2rem;
+  }
+}
+
+@media (max-width: 575px) {
+  .display-title {
+    font-size: 2.65rem;
   }
 }

@@ -5,9 +5,9 @@ import { TypePokemonComponent } from './features/type-pokemon/type-pokemon.compo
 import { TypesComponent } from './features/types/types.component';
 
 export const routes: Routes = [
-	{ path: '', redirectTo: 'types', pathMatch: 'full' },
-	{ path: 'types', component: TypesComponent },
-	{ path: 'types/:type', component: TypePokemonComponent },
-	{ path: 'pokemon/:name', component: PokemonDetailComponent },
-	{ path: '**', component: NotFoundComponent },
+  { path: '', redirectTo: 'types', pathMatch: 'full' },
+  { path: 'types', component: TypesComponent },
+  { path: 'types/:type', component: TypePokemonComponent },
+  { path: 'pokemon/:name', component: PokemonDetailComponent },
+  { path: '**', component: NotFoundComponent },
 ];

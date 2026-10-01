@@ -4,7 +4,9 @@
       <a class="back-link" routerLink="/types">
         <span aria-hidden="true">←</span> Tutte le categorie
       </a>
-      <p class="eyebrow">CATEGORIA {{ selectedCategory.number }} · TIPO {{ selectedCategory.type }}</p>
+      <p class="eyebrow">
+        CATEGORIA {{ selectedCategory.number }} · TIPO {{ selectedCategory.type }}
+      </p>
       <div class="type-intro__row">
         <div>
           <h1 id="type-heading">{{ selectedCategory.label }}<span>.</span></h1>
@@ -33,9 +35,7 @@
     <div class="alert error-state" role="alert">
       <span>{{ errorMessage }}</span>
       @if (category) {
-        <button class="btn btn-sm retry-button" type="button" (click)="retry()">
-          Riprova
-        </button>
+        <button class="btn btn-sm retry-button" type="button" (click)="retry()">Riprova</button>
       }
     </div>
   }

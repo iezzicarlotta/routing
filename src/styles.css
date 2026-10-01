@@ -1,37 +1,37 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap');
 
 :root {
-	color-scheme: light;
-	--ink: #173a35;
-	--ink-muted: #63756f;
-	--canvas: #f1f5f1;
-	--surface: #ffffff;
-	--line: #dce5dd;
-	--accent: #e65e45;
-	--font-display: 'Fraunces', Georgia, serif;
-	--font-body: 'DM Sans', 'Trebuchet MS', sans-serif;
+  color-scheme: light;
+  --ink: #173a35;
+  --ink-muted: #63756f;
+  --canvas: #f1f5f1;
+  --surface: #ffffff;
+  --line: #dce5dd;
+  --accent: #e65e45;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'DM Sans', 'Trebuchet MS', sans-serif;
 }
 
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-	min-width: 320px;
-	margin: 0;
-	background-color: var(--canvas);
-	background-image: radial-gradient(#cad8cb 0.65px, transparent 0.65px);
-	background-size: 22px 22px;
-	color: var(--ink);
-	font-family: var(--font-body);
-	-webkit-font-smoothing: antialiased;
+  min-width: 320px;
+  margin: 0;
+  background-color: var(--canvas);
+  background-image: radial-gradient(#cad8cb 0.65px, transparent 0.65px);
+  background-size: 22px 22px;
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
 }
 
 .page-container {
-	max-width: 72rem;
+  max-width: 72rem;
 }
 
 :focus-visible {
-	outline: 3px solid var(--accent);
-	outline-offset: 3px;
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
 }

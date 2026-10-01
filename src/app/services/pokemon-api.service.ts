@@ -1,10 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import {
-  PokemonTypeIndexResponse,
-  PokemonTypeResponse,
-} from '../models/pokemon-type.model';
+import { PokemonTypeIndexResponse, PokemonTypeResponse } from '../models/pokemon-type.model';
 import { PokemonDetail } from '../models/pokemon.model';
 
 @Injectable({ providedIn: 'root' })

@@ -1,8 +1,5 @@
 import { provideHttpClient } from '@angular/common/http';
-import {
-  HttpTestingController,
-  provideHttpClientTesting,
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { PokemonApiService } from './pokemon-api.service';
 
@@ -12,11 +9,7 @@ describe('PokemonApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        PokemonApiService,
-        provideHttpClient(),
-        provideHttpClientTesting(),
-      ],
+      providers: [PokemonApiService, provideHttpClient(), provideHttpClientTesting()],
     });
     service = TestBed.inject(PokemonApiService);
     httpController = TestBed.inject(HttpTestingController);
@@ -39,9 +32,7 @@ describe('PokemonApiService', () => {
     const pokemonRequest = service.getPokemonByType('fire');
     pokemonRequest.subscribe();
 
-    const request = httpController.expectOne(
-      'https://pokeapi.co/api/v2/type/fire/',
-    );
+    const request = httpController.expectOne('https://pokeapi.co/api/v2/type/fire/');
     expect(request.request.method).toBe('GET');
     request.flush({ id: 10, name: 'fire', pokemon: [] });
   });
@@ -50,9 +41,7 @@ describe('PokemonApiService', () => {
     const detailsRequest = service.getPokemonDetails('Pikachu');
     detailsRequest.subscribe();
 
-    const request = httpController.expectOne(
-      'https://pokeapi.co/api/v2/pokemon/pikachu/',
-    );
+    const request = httpController.expectOne('https://pokeapi.co/api/v2/pokemon/pikachu/');
     expect(request.request.method).toBe('GET');
     request.flush({
       id: 25,

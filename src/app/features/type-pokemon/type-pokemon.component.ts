@@ -50,9 +50,7 @@ export class TypePokemonComponent implements OnInit {
   }
 
   get firstVisibleNumber(): number {
-    return this.pokemonAssociations.length === 0
-      ? 0
-      : (this.currentPage - 1) * this.pageSize + 1;
+    return this.pokemonAssociations.length === 0 ? 0 : (this.currentPage - 1) * this.pageSize + 1;
   }
 
   get lastVisibleNumber(): number {
@@ -71,9 +69,7 @@ export class TypePokemonComponent implements OnInit {
     merge(routeTypeName, retryTypeName)
       .pipe(
         switchMap((typeName) =>
-          this.loadPokemonForType(typeName).pipe(
-            catchError(this.onPokemonRequestError),
-          ),
+          this.loadPokemonForType(typeName).pipe(catchError(this.onPokemonRequestError)),
         ),
         takeUntilDestroyed(this.destroyRef),
       )
@@ -120,16 +116,12 @@ export class TypePokemonComponent implements OnInit {
       : 'Questo tipo non esiste. Scegli una delle categorie disponibili.';
   };
 
-  readonly onPokemonRequestError = (
-    error: HttpErrorResponse,
-  ): Observable<never> => {
+  readonly onPokemonRequestError = (error: HttpErrorResponse): Observable<never> => {
     this.onPokemonError(error);
     return EMPTY;
   };
 
-  private loadPokemonForType(
-    typeName: string | null,
-  ): Observable<PokemonTypeResponse> {
+  private loadPokemonForType(typeName: string | null): Observable<PokemonTypeResponse> {
     this.currentType = typeName?.toLowerCase() ?? '';
     this.currentPage = 1;
     this.pokemonAssociations = [];

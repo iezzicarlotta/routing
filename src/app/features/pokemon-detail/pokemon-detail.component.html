@@ -19,9 +19,7 @@
   @if (errorMessage) {
     <div class="alert error-state" role="alert">
       <span>{{ errorMessage }}</span>
-      <button class="btn btn-sm retry-button" type="button" (click)="retry()">
-        Riprova
-      </button>
+      <button class="btn btn-sm retry-button" type="button" (click)="retry()">Riprova</button>
     </div>
   }
 
@@ -56,7 +54,9 @@
               Immagine non disponibile
             </div>
           }
-          <span class="portrait-index" aria-hidden="true">#{{ pokemonIdLabel(currentPokemon.id) }}</span>
+          <span class="portrait-index" aria-hidden="true"
+            >#{{ pokemonIdLabel(currentPokemon.id) }}</span
+          >
         </section>
 
         <section class="measurements" aria-label="Misure">

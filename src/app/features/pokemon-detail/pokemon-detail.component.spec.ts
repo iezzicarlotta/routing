@@ -1,22 +1,12 @@
 import { provideHttpClient } from '@angular/common/http';
-import {
-  HttpTestingController,
-  provideHttpClientTesting,
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  ActivatedRoute,
-  convertToParamMap,
-  ParamMap,
-} from '@angular/router';
+import { ActivatedRoute, convertToParamMap, ParamMap } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { PokemonDetail } from '../../models/pokemon.model';
 import { PokemonDetailComponent } from './pokemon-detail.component';
 
-function createPokemonDetails(
-  name = 'pikachu',
-  id = 25,
-): PokemonDetail {
+function createPokemonDetails(name = 'pikachu', id = 25): PokemonDetail {
   return {
     id,
     name,
@@ -58,12 +48,8 @@ describe('PokemonDetailComponent', () => {
   let httpController: HttpTestingController;
 
   beforeEach(async () => {
-    pokemonNames = new BehaviorSubject(
-      convertToParamMap({ name: 'pikachu' }),
-    );
-    queryParameters = new BehaviorSubject(
-      convertToParamMap({ type: 'fire' }),
-    );
+    pokemonNames = new BehaviorSubject(convertToParamMap({ name: 'pikachu' }));
+    queryParameters = new BehaviorSubject(convertToParamMap({ type: 'fire' }));
     const activatedRoute = {
       paramMap: pokemonNames.asObservable(),
       queryParamMap: queryParameters.asObservable(),
@@ -91,9 +77,7 @@ describe('PokemonDetailComponent', () => {
   });
 
   it('carica i dettagli, traduce i tipi e converte peso e altezza', () => {
-    const request = httpController.expectOne(
-      'https://pokeapi.co/api/v2/pokemon/pikachu/',
-    );
+    const request = httpController.expectOne('https://pokeapi.co/api/v2/pokemon/pikachu/');
     request.flush(createPokemonDetails());
 
     const component = fixture.componentInstance;
@@ -108,9 +92,7 @@ describe('PokemonDetailComponent', () => {
   });
 
   it('usa la sprite alternativa e gestisce anche l’assenza di entrambe le immagini', () => {
-    const request = httpController.expectOne(
-      'https://pokeapi.co/api/v2/pokemon/pikachu/',
-    );
+    const request = httpController.expectOne('https://pokeapi.co/api/v2/pokemon/pikachu/');
     request.flush(createPokemonDetails());
 
     const component = fixture.componentInstance;
@@ -136,9 +118,7 @@ describe('PokemonDetailComponent', () => {
   });
 
   it('aggiorna i query parameter senza richieste extra e annulla i dettagli precedenti', () => {
-    const firstRequest = httpController.expectOne(
-      'https://pokeapi.co/api/v2/pokemon/pikachu/',
-    );
+    const firstRequest = httpController.expectOne('https://pokeapi.co/api/v2/pokemon/pikachu/');
     pokemonNames.next(convertToParamMap({ name: 'charmander' }));
     queryParameters.next(convertToParamMap({ type: 'grass' }));
 
@@ -154,23 +134,17 @@ describe('PokemonDetailComponent', () => {
   });
 
   it('mostra un errore HTTP e permette di riprovare', () => {
-    const failedRequest = httpController.expectOne(
-      'https://pokeapi.co/api/v2/pokemon/pikachu/',
-    );
+    const failedRequest = httpController.expectOne('https://pokeapi.co/api/v2/pokemon/pikachu/');
     failedRequest.flush('Servizio non disponibile', {
       status: 503,
       statusText: 'Service Unavailable',
     });
 
     expect(fixture.componentInstance.isLoading).toBe(false);
-    expect(fixture.componentInstance.errorMessage).toContain(
-      'Non è stato possibile caricare',
-    );
+    expect(fixture.componentInstance.errorMessage).toContain('Non è stato possibile caricare');
 
     fixture.componentInstance.retry();
-    const retriedRequest = httpController.expectOne(
-      'https://pokeapi.co/api/v2/pokemon/pikachu/',
-    );
+    const retriedRequest = httpController.expectOne('https://pokeapi.co/api/v2/pokemon/pikachu/');
     retriedRequest.flush(createPokemonDetails());
 
     expect(fixture.componentInstance.isLoading).toBe(false);
@@ -179,25 +153,17 @@ describe('PokemonDetailComponent', () => {
   });
 
   it('rifiuta identificativi malformati e termina lo stato loading', () => {
-    const firstRequest = httpController.expectOne(
-      'https://pokeapi.co/api/v2/pokemon/pikachu/',
-    );
+    const firstRequest = httpController.expectOne('https://pokeapi.co/api/v2/pokemon/pikachu/');
     pokemonNames.next(convertToParamMap({ name: 'not a pokemon' }));
 
     expect(firstRequest.cancelled).toBe(true);
     expect(fixture.componentInstance.isLoading).toBe(false);
-    expect(fixture.componentInstance.errorMessage).toContain(
-      'Nessun Pokémon corrisponde',
-    );
-    httpController.expectNone(
-      'https://pokeapi.co/api/v2/pokemon/not%20a%20pokemon/',
-    );
+    expect(fixture.componentInstance.errorMessage).toContain('Nessun Pokémon corrisponde');
+    httpController.expectNone('https://pokeapi.co/api/v2/pokemon/not%20a%20pokemon/');
   });
 
   it('usa il collegamento generale quando la route non conserva la categoria', () => {
-    const initialRequest = httpController.expectOne(
-      'https://pokeapi.co/api/v2/pokemon/pikachu/',
-    );
+    const initialRequest = httpController.expectOne('https://pokeapi.co/api/v2/pokemon/pikachu/');
     initialRequest.flush(createPokemonDetails());
     queryParameters.next(convertToParamMap({}));
 

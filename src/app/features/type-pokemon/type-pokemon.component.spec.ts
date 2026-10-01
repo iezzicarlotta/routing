@@ -1,8 +1,5 @@
 import { provideHttpClient } from '@angular/common/http';
-import {
-  HttpTestingController,
-  provideHttpClientTesting,
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, ParamMap } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -14,9 +11,7 @@ describe('TypePokemonComponent', () => {
   let httpController: HttpTestingController;
 
   beforeEach(async () => {
-    routeParameters = new BehaviorSubject(
-      convertToParamMap({ type: 'fire' }),
-    );
+    routeParameters = new BehaviorSubject(convertToParamMap({ type: 'fire' }));
     const activatedRoute = {
       paramMap: routeParameters.asObservable(),
       snapshot: { paramMap: routeParameters.value },
@@ -40,9 +35,7 @@ describe('TypePokemonComponent', () => {
   });
 
   it('carica tutti i risultati e li divide in pagine navigabili', () => {
-    const request = httpController.expectOne(
-      'https://pokeapi.co/api/v2/type/fire/',
-    );
+    const request = httpController.expectOne('https://pokeapi.co/api/v2/type/fire/');
     const pokemon = Array.from({ length: 25 }, (_, index) => ({
       slot: 1,
       pokemon: {
@@ -66,16 +59,12 @@ describe('TypePokemonComponent', () => {
   });
 
   it('annulla la richiesta precedente quando cambia il parametro di rotta', () => {
-    const fireRequest = httpController.expectOne(
-      'https://pokeapi.co/api/v2/type/fire/',
-    );
+    const fireRequest = httpController.expectOne('https://pokeapi.co/api/v2/type/fire/');
 
     routeParameters.next(convertToParamMap({ type: 'water' }));
 
     expect(fireRequest.cancelled).toBe(true);
-    const waterRequest = httpController.expectOne(
-      'https://pokeapi.co/api/v2/type/water/',
-    );
+    const waterRequest = httpController.expectOne('https://pokeapi.co/api/v2/type/water/');
     waterRequest.flush({
       id: 11,
       name: 'water',
@@ -91,43 +80,31 @@ describe('TypePokemonComponent', () => {
     });
 
     expect(fixture.componentInstance.currentType).toBe('water');
-    expect(fixture.componentInstance.pokemonAssociations[0].pokemon.name).toBe(
-      'squirtle',
-    );
+    expect(fixture.componentInstance.pokemonAssociations[0].pokemon.name).toBe('squirtle');
   });
 
   it('gestisce un tipo inesistente senza inviare richieste HTTP', () => {
-    const fireRequest = httpController.expectOne(
-      'https://pokeapi.co/api/v2/type/fire/',
-    );
+    const fireRequest = httpController.expectOne('https://pokeapi.co/api/v2/type/fire/');
     routeParameters.next(convertToParamMap({ type: 'ghost' }));
 
     expect(fireRequest.cancelled).toBe(true);
-    expect(fixture.componentInstance.errorMessage).toContain(
-      'Questo tipo non esiste',
-    );
+    expect(fixture.componentInstance.errorMessage).toContain('Questo tipo non esiste');
     expect(fixture.componentInstance.isLoading).toBe(false);
     httpController.expectNone('https://pokeapi.co/api/v2/type/ghost/');
   });
 
   it('mantiene attiva la sottoscrizione e riprova dopo un errore HTTP', () => {
-    const failedRequest = httpController.expectOne(
-      'https://pokeapi.co/api/v2/type/fire/',
-    );
+    const failedRequest = httpController.expectOne('https://pokeapi.co/api/v2/type/fire/');
     failedRequest.flush('Servizio non disponibile', {
       status: 503,
       statusText: 'Service Unavailable',
     });
 
     expect(fixture.componentInstance.isLoading).toBe(false);
-    expect(fixture.componentInstance.errorMessage).toContain(
-      'Non è stato possibile caricare',
-    );
+    expect(fixture.componentInstance.errorMessage).toContain('Non è stato possibile caricare');
 
     fixture.componentInstance.retry();
-    const retriedRequest = httpController.expectOne(
-      'https://pokeapi.co/api/v2/type/fire/',
-    );
+    const retriedRequest = httpController.expectOne('https://pokeapi.co/api/v2/type/fire/');
     retriedRequest.flush({ id: 10, name: 'fire', pokemon: [] });
 
     expect(fixture.componentInstance.isLoading).toBe(false);
